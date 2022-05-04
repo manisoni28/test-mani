@@ -7,7 +7,6 @@ import Card from "./Card";
 import { mutateTree } from "@atlaskit/tree";
 import "@atlaskit/css-reset";
 import "./Board.css";
-
 const PADDING_PER_LEVEL = 16;
 
 class Board extends Component {
@@ -24,10 +23,10 @@ class Board extends Component {
     }
     const { trees } = this.state;
     const sourceTree = trees.find(
-      tree => !!tree.items[sourcePosition.parentId]
+      (tree) => !!tree.items[sourcePosition.parentId]
     );
     const destTree = trees.find(
-      tree => !!tree.items[destinationPosition.parentId]
+      (tree) => !!tree.items[destinationPosition.parentId]
     );
 
     // removeItemFromTree actually just removes the itemId from parent item's children
@@ -41,7 +40,7 @@ class Board extends Component {
 
     // actually remove the item and children from items
     delete newSourceTree.items[removedItemId];
-    childItems.forEach(item => delete newSourceTree.items[item.id]);
+    childItems.forEach((item) => delete newSourceTree.items[item.id]);
 
     const newDestTree = Board.addItemToTree(
       destTree === sourceTree ? newSourceTree : destTree,
@@ -51,7 +50,7 @@ class Board extends Component {
 
     // actually add the item and children to items
     newDestTree.items[removedItemId] = movingItem;
-    childItems.forEach(item => (newDestTree.items[item.id] = item));
+    childItems.forEach((item) => (newDestTree.items[item.id] = item));
 
     this.updateTreesInState([newDestTree, newSourceTree]);
   };
@@ -60,7 +59,7 @@ class Board extends Component {
     const item = tree.items[itemId];
     const childIds = item.children;
     const children = [];
-    childIds.forEach(childId =>
+    childIds.forEach((childId) =>
       children.push(
         tree.items[childId],
         ...Board.getAllItemChildren(tree, childId)
@@ -108,19 +107,19 @@ class Board extends Component {
 
   findTreeWithItem(itemId) {
     const { trees } = this.state;
-    return trees.find(tree => !!tree.items[itemId]);
+    return trees.find((tree) => !!tree.items[itemId]);
   }
 
   updateTreesInState(newTrees) {
     const { trees } = this.state;
-    const finalTrees = trees.map(tree => {
-      return newTrees.find(newTree => tree.rootId === newTree.rootId) || tree;
+    const finalTrees = trees.map((tree) => {
+      return newTrees.find((newTree) => tree.rootId === newTree.rootId) || tree;
     });
     this.setState({ trees: finalTrees });
   }
 
-  onExpand = id => this.setExpanded(id, true);
-  onCollapse = id => this.setExpanded(id, false);
+  onExpand = (id) => this.setExpanded(id, true);
+  onCollapse = (id) => this.setExpanded(id, false);
 
   setExpanded = (id, isExpanded) => {
     const sourceTree = this.findTreeWithItem(id);
